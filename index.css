@@ -1568,102 +1568,6 @@ ul {
 }
 
 /* --- Monte sua Bandeja Section --- */
-.tray-section {
-    position: relative;
-    z-index: 10;
-}
-
-.tray-layout {
-    margin-top: 48px;
-    align-items: stretch;
-}
-
-.tray-products-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.tray-sub-title {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--color-white);
-    margin-bottom: 24px;
-}
-
-.tray-products-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.tray-product-card {
-    background-color: var(--color-bg-card);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-md);
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    transition: var(--transition-smooth);
-}
-
-.tray-product-card:hover {
-    border-color: rgba(223, 177, 91, 0.2);
-    transform: translateX(4px);
-    background-color: rgba(23, 25, 35, 0.6);
-}
-
-.tray-product-emoji {
-    font-size: 2.2rem;
-    width: 50px;
-    height: 50px;
-    background-color: rgba(255, 255, 255, 0.03);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--glass-border);
-}
-
-.tray-product-details {
-    flex-grow: 1;
-}
-
-.tray-product-details h4 {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--color-white);
-    margin-bottom: 4px;
-}
-
-.tray-product-details p {
-    font-size: 0.85rem;
-    color: var(--color-text-secondary);
-}
-
-.btn-add-tray {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background-color: rgba(223, 177, 91, 0.1);
-    color: var(--color-primary);
-    border: 1px solid rgba(223, 177, 91, 0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    font-weight: 600;
-    transition: var(--transition-fast);
-}
-
-.btn-add-tray:hover {
-    background-color: var(--color-primary);
-    color: #050505;
-    transform: scale(1.1);
-    box-shadow: 0 0 15px rgba(223, 177, 91, 0.3);
-}
 
 /* Wood serving tray styling */
 .tray-visual-container {
@@ -1917,4 +1821,4 @@ ul {
         font-size: 2.5rem;
     }
 }
-}
+
