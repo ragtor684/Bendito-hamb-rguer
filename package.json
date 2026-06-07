@@ -1,0 +1,23 @@
+{
+  "name": "primary",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ragtor684/Bendito-hamb-rguer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ragtor684/Bendito-hamb-rguer/issues"
+  },
+  "homepage": "https://github.com/ragtor684/Bendito-hamb-rguer#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
