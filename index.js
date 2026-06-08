@@ -9,7 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Sticky Header ---
     const header = document.querySelector('.header');
+    if (!header) {
+        console.error('Critical element missing: .header not found in DOM');
+    }
     const handleScroll = () => {
+        if (!header) return;
         if (window.scrollY > 20) {
             header.classList.add('scrolled');
         } else {
@@ -24,7 +28,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileMenu = document.querySelector('.mobile-menu');
     const mobileLinks = document.querySelectorAll('.mobile-nav-link');
     
+    if (!menuToggle || !mobileMenu) {
+        console.error('Mobile menu elements missing: .menu-toggle or .mobile-menu not found in DOM');
+    }
+
     const toggleMenu = () => {
+        if (!menuToggle || !mobileMenu) return;
         const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
         menuToggle.setAttribute('aria-expanded', !isExpanded);
         mobileMenu.classList.toggle('active');
@@ -32,12 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const closeMenu = () => {
+        if (!menuToggle || !mobileMenu) return;
         menuToggle.setAttribute('aria-expanded', 'false');
         mobileMenu.classList.remove('active');
         setScrollLock(false);
     };
 
-    menuToggle.addEventListener('click', toggleMenu);
+    if (menuToggle) {
+        menuToggle.addEventListener('click', toggleMenu);
+    }
     
     mobileLinks.forEach(link => {
         link.addEventListener('click', closeMenu);
@@ -80,12 +92,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Interactive Gallery Lightbox ---
     const galleryItems = document.querySelectorAll('.gallery-item');
     const lightbox = document.getElementById('gallery-lightbox');
-    const lightboxImg = lightbox.querySelector('.lightbox-img');
-    const lightboxTitle = lightbox.querySelector('.lightbox-title');
-    const lightboxDesc = lightbox.querySelector('.lightbox-desc');
-    const lightboxClose = lightbox.querySelector('.lightbox-close');
-    const lightboxPrev = lightbox.querySelector('.lightbox-prev');
-    const lightboxNext = lightbox.querySelector('.lightbox-next');
+
+    if (!lightbox) {
+        console.error('Lightbox element missing: #gallery-lightbox not found in DOM');
+    }
+
+    const lightboxImg = lightbox ? lightbox.querySelector('.lightbox-img') : null;
+    const lightboxTitle = lightbox ? lightbox.querySelector('.lightbox-title') : null;
+    const lightboxDesc = lightbox ? lightbox.querySelector('.lightbox-desc') : null;
+    const lightboxClose = lightbox ? lightbox.querySelector('.lightbox-close') : null;
+    const lightboxPrev = lightbox ? lightbox.querySelector('.lightbox-prev') : null;
+    const lightboxNext = lightbox ? lightbox.querySelector('.lightbox-next') : null;
+
+    if (lightbox && (!lightboxImg || !lightboxTitle || !lightboxDesc || !lightboxClose || !lightboxPrev || !lightboxNext)) {
+        console.error('Lightbox is incomplete: one or more child elements (.lightbox-img, .lightbox-title, .lightbox-desc, .lightbox-close, .lightbox-prev, .lightbox-next) not found');
+    }
     
     // Gallery Data matching HTML structure
     const galleryData = [
@@ -139,6 +160,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIdx = 0;
 
     const openLightbox = (index) => {
+        if (!lightbox || !lightboxImg || !lightboxTitle || !lightboxDesc) {
+            console.error('Cannot open lightbox: required elements are missing');
+            return;
+        }
+
+        if (index < 0 || index >= galleryData.length || Number.isNaN(index)) {
+            console.error('Invalid gallery index:', index);
+            return;
+        }
+
         currentIdx = index;
         const item = galleryData[currentIdx];
         
@@ -147,19 +178,25 @@ document.addEventListener('DOMContentLoaded', () => {
         lightboxTitle.textContent = item.title;
         lightboxDesc.textContent = item.desc;
         
+        lightboxImg.onerror = () => {
+            console.error('Failed to load lightbox image:', item.src);
+            lightboxImg.alt = 'Imagem indisponível';
+        };
+
         lightbox.classList.add('active');
         lightbox.setAttribute('aria-hidden', 'false');
         setScrollLock(true);
     };
 
     const closeLightbox = () => {
+        if (!lightbox || !lightboxImg) return;
         lightbox.classList.remove('active');
         lightbox.setAttribute('aria-hidden', 'true');
         setScrollLock(false);
         
         // Reset src to prevent flashing previous image on next open
         setTimeout(() => {
-            lightboxImg.src = '';
+            if (lightboxImg) lightboxImg.src = '';
         }, 300);
     };
 
@@ -172,26 +209,43 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attach listeners to gallery items
     galleryItems.forEach(item => {
         item.addEventListener('click', () => {
-            const index = parseInt(item.getAttribute('data-index'), 10);
+            const rawIndex = item.getAttribute('data-index');
+            if (rawIndex === null) {
+                console.error('Gallery item is missing data-index attribute:', item);
+                return;
+            }
+            const index = parseInt(rawIndex, 10);
+            if (Number.isNaN(index)) {
+                console.error('Gallery item has invalid data-index value:', rawIndex);
+                return;
+            }
             openLightbox(index);
         });
     });
 
-    // Control listeners
-    lightboxClose.addEventListener('click', closeLightbox);
-    lightboxNext.addEventListener('click', (e) => navigateGallery(1, e));
-    lightboxPrev.addEventListener('click', (e) => navigateGallery(-1, e));
+    // Control listeners (only attach if elements exist)
+    if (lightboxClose) {
+        lightboxClose.addEventListener('click', closeLightbox);
+    }
+    if (lightboxNext) {
+        lightboxNext.addEventListener('click', (e) => navigateGallery(1, e));
+    }
+    if (lightboxPrev) {
+        lightboxPrev.addEventListener('click', (e) => navigateGallery(-1, e));
+    }
 
     // Close lightbox on click outside the image
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox || e.target === lightbox.querySelector('.lightbox-content-wrapper')) {
-            closeLightbox();
-        }
-    });
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target === lightbox.querySelector('.lightbox-content-wrapper')) {
+                closeLightbox();
+            }
+        });
+    }
 
     // Keyboard controls
     document.addEventListener('keydown', (e) => {
-        if (!lightbox.classList.contains('active')) return;
+        if (!lightbox || !lightbox.classList.contains('active')) return;
         
         if (e.key === 'Escape') {
             closeLightbox();
