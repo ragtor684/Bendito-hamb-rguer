@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
+    // --- Shared Utilities ---
+    const setScrollLock = (locked) => {
+        document.body.classList.toggle('no-scroll', locked);
+    };
+
+    const wrapIndex = (index, length) => ((index % length) + length) % length;
+
     // --- Sticky Header ---
     const header = document.querySelector('.header');
     const handleScroll = () => {
@@ -21,13 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
         menuToggle.setAttribute('aria-expanded', !isExpanded);
         mobileMenu.classList.toggle('active');
-        document.body.classList.toggle('no-scroll');
+        setScrollLock(!isExpanded);
     };
 
     const closeMenu = () => {
         menuToggle.setAttribute('aria-expanded', 'false');
         mobileMenu.classList.remove('active');
-        document.body.classList.remove('no-scroll');
+        setScrollLock(false);
     };
 
     menuToggle.addEventListener('click', toggleMenu);
@@ -142,13 +149,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         lightbox.classList.add('active');
         lightbox.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('no-scroll');
+        setScrollLock(true);
     };
 
     const closeLightbox = () => {
         lightbox.classList.remove('active');
         lightbox.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('no-scroll');
+        setScrollLock(false);
         
         // Reset src to prevent flashing previous image on next open
         setTimeout(() => {
@@ -156,15 +163,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     };
 
-    const showNext = (e) => {
-        e.stopPropagation();
-        currentIdx = (currentIdx + 1) % galleryData.length;
-        openLightbox(currentIdx);
-    };
-
-    const showPrev = (e) => {
-        e.stopPropagation();
-        currentIdx = (currentIdx - 1 + galleryData.length) % galleryData.length;
+    const navigateGallery = (direction, e) => {
+        if (e) e.stopPropagation();
+        currentIdx = wrapIndex(currentIdx + direction, galleryData.length);
         openLightbox(currentIdx);
     };
 
@@ -178,8 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Control listeners
     lightboxClose.addEventListener('click', closeLightbox);
-    lightboxNext.addEventListener('click', showNext);
-    lightboxPrev.addEventListener('click', showPrev);
+    lightboxNext.addEventListener('click', (e) => navigateGallery(1, e));
+    lightboxPrev.addEventListener('click', (e) => navigateGallery(-1, e));
 
     // Close lightbox on click outside the image
     lightbox.addEventListener('click', (e) => {
@@ -195,11 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape') {
             closeLightbox();
         } else if (e.key === 'ArrowRight') {
-            currentIdx = (currentIdx + 1) % galleryData.length;
-            openLightbox(currentIdx);
+            navigateGallery(1);
         } else if (e.key === 'ArrowLeft') {
-            currentIdx = (currentIdx - 1 + galleryData.length) % galleryData.length;
-            openLightbox(currentIdx);
+            navigateGallery(-1);
         }
     });
     
