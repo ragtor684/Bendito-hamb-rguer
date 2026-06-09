@@ -31,7 +31,12 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="imagens/Logo bendito.png">
-    
+
+    <!-- Security Headers (meta-tag fallback) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ONRZYZuShNwVHh3BUwUvQfVbsjTNyL0canAx8F8t4SY=' https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-src https://maps.google.com https://www.google.com; connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
     <!-- Vercel Web Analytics -->
     <script>
         window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -364,7 +369,7 @@
             <div class="localizacao-map scroll-reveal">
                 <div class="map-wrapper">
                     <!-- Google Maps Iframe showing the actual coordinates for Rua Emílio Altemburg, Centro, Ituporanga -->
-                    <iframe src="https://maps.google.com/maps?q=Bendito%20Hamb%C3%BArguer,%20Rua%20Em%C3%ADlio%20Altemburg,%20Centro,%20Ituporanga%20-%20SC&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" aria-label="Mapa do Google Maps mostrando a localização do Bendito Hambúrguer"></iframe>
+                    <iframe src="https://maps.google.com/maps?q=Bendito%20Hamb%C3%BArguer,%20Rua%20Em%C3%ADlio%20Altemburg,%20Centro,%20Ituporanga%20-%20SC&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups" aria-label="Mapa do Google Maps mostrando a localização do Bendito Hambúrguer"></iframe>
                 </div>
             </div>
         </div>
